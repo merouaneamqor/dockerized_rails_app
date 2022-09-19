@@ -1,9 +1,13 @@
 version: '3'
 services:
-  db:
-    image: postgres
+  mongodb:
+    container_name: mongodb
+    image: mongo:5.0
+    restart: always
+    ports:
+      - "27017:27017"
     volumes:
-      - ./tmp/db:/var/lib/postgresql/data
+      - $PWD/infra/data/mongo:/data/db
   web:
     build: .
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
@@ -12,4 +16,4 @@ services:
     ports:
       - "3001:3000"
     depends_on:
-      - db
+      - mongodb
